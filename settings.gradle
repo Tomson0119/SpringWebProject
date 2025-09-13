@@ -2,3 +2,5 @@ rootProject.name = 'web_project'
 include 'wp-common'
 include 'wp-api'
 include 'wp-domain'
+include 'wp-app'
+
