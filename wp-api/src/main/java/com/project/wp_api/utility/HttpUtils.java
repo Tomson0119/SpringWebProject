@@ -1,11 +1,13 @@
 package com.project.wp_api.utility;
 
+import com.project.wp_common.logManage.WpLogger;
 import jakarta.servlet.http.HttpServletRequest;
+
 import java.io.IOException;
 
 public class HttpUtils {
 
-    public static void PrintHttpRequest(HttpServletRequest request) {
+    public static void printHttpRequest(HttpServletRequest request, WpLogger logger) {
 
         try {
             var stringBuilder = new StringBuilder();
@@ -21,13 +23,13 @@ public class HttpUtils {
             stringBuilder.append("=============== Parameters ===============\n");
 
             var parameterMap = request.getParameterMap();
-            for(var key : parameterMap.keySet()) {
+            for (var key : parameterMap.keySet()) {
                 stringBuilder.append(key).append(": ");
 
                 var values = parameterMap.get(key);
-                for(var i=0; i<values.length; i++) {
+                for (var i = 0; i < values.length; i++) {
                     stringBuilder.append(values[i]);
-                    if(i < values.length - 1) {
+                    if (i < values.length - 1) {
                         stringBuilder.append(',');
                     }
                 }
@@ -57,12 +59,14 @@ public class HttpUtils {
 
             stringBuilder.append("==========================================\n");
 
-            //todo. 로깅하여 출력하도록 수정 예정
-            System.out.println(stringBuilder.toString());
-        }
-        catch(IOException exception) {
-            //todo. 로깅하여 출력하도록 수정 예정
-            System.out.println(exception.toString());
+            logger.forInfoLog()
+                  .message(stringBuilder.toString())
+                  .log();
+            
+        } catch (IOException exception) {
+            logger.forErrorLog()
+                  .exception(exception)
+                  .log();
         }
     }
 }
