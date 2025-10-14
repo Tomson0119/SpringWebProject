@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "rootDir": "./src/main/resources/static/ts",
+    "outDir": "./src/main/resources/static/js",
+    "module": "esnext",
+    "target": "esnext",
+    "types": [],
+    "strict": true,
+    "esModuleInterop": true,
+    "declaration": false,
+    "sourceMap": false,
+    "declarationMap": false
+  },
+  "include": [
+    "./src/main/resources/static/ts/**/*.ts"
+  ]
+}
