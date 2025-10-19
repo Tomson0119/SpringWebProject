@@ -50,7 +50,11 @@ public class WpLogBuilder {
 
     private String buildMessage() {
         var stringBuilder = new StringBuilder();
-        stringBuilder.append(message).append('|');
+        stringBuilder.append(message);
+
+        if (parameters.isEmpty() == false) {
+            stringBuilder.append('|');
+        }
 
         for (var i = 0; i < parameters.size(); i++) {
             var param = parameters.get(i);
