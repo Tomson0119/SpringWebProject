@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>서비스 로그인</title>
-    <link rel="stylesheet" th:href="@{/css/login.css}">
-</head>
-<body>
-    <div class="login-box">
-        <h2>로그인</h2>
+    <head>
+        <meta charset="UTF-8" />
+        <title>서비스 로그인</title>
+        <link rel="stylesheet" th:href="@{/css/login.css}" />
+        <script defer type="module" th:src="@{/js/login.js}"></script>
+    </head>
+    <body>
+        <div class="login-box">
+            <h2>로그인</h2>
 
-        <form method="post">
-            <input type="text" name="userName" placeholder="아이디" required>
-            <input type="password" name="password" placeholder="비밀번호" required>
+            <input id="name" placeholder="아이디" required type="text" />
+            <input id="password" placeholder="비밀번호" required type="password" />
             <button id="loginButton" type="submit">로그인</button>
-        </form>
-    </div>
-</body>
+
+            <a class="register-link" href="register">계정등록</a>
+        </div>
+    </body>
 </html>
