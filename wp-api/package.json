@@ -1,0 +1,12 @@
+{
+    "name": "wp-api",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "generate-models": "npx swagger-typescript-api generate -p http://localhost:8080/v3/api-docs -o src/main/resources/static/ts/common/type -n model.d.ts --clean-output --no-client"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+}
