@@ -19,3 +19,13 @@ export interface LoginResponse {
   name?: string;
   password?: string;
 }
+
+export interface JoinRequest {
+  name?: string;
+  password?: string;
+}
+
+export interface JoinResponse {
+  name?: string;
+  password?: string;
+}

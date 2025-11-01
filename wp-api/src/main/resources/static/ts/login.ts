@@ -1,4 +1,5 @@
 import { LoginRequest, LoginResponse } from "./common/type/model";
+import * as HtmlUtility from "./common/utility/htmlUtility.js";
 import { post } from "./common/utility/httpUtility.js";
 
 async function postLogin(name: string, password: string): Promise<LoginResponse | null> {
@@ -17,8 +18,8 @@ async function postLogin(name: string, password: string): Promise<LoginResponse 
 }
 
 async function sendLoginRequest() {
-    const inputName = (document.getElementById("name") as HTMLInputElement).value;
-    const inputPassword = (document.getElementById("password") as HTMLInputElement).value;
+    const inputName = HtmlUtility.getInputElementText("name");
+    const inputPassword = HtmlUtility.getInputElementText("password");
 
     if (inputName == null || inputName.length <= 0) {
         console.error("cannot find inputName tag or didn't input name");
@@ -49,13 +50,7 @@ async function sendLoginRequest() {
 }
 
 async function main() {
-    const loginButton = document.getElementById("loginButton");
-
-    if (loginButton == null) {
-        console.error("Failed to find login button");
-        return;
-    }
-
+    const loginButton = HtmlUtility.getElement("loginButton");
     loginButton.addEventListener("click", sendLoginRequest);
 }
 
