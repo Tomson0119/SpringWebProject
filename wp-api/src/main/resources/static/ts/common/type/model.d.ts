@@ -10,22 +10,33 @@
  * ---------------------------------------------------------------
  */
 
-export interface LoginRequest {
-  name?: string;
-  password?: string;
+export type LoginRequest = WpRequest & {
+    name?: string;
+    password?: string;
+};
+
+export type WpRequest = object;
+
+export type LoginResponse = WpResponse & {
+    /** @format int32 */
+    customErrorCode?: number;
+    name?: string;
+    password?: string;
+};
+
+export interface WpResponse {
+    /** @format int32 */
+    customErrorCode?: number;
 }
 
-export interface LoginResponse {
-  name?: string;
-  password?: string;
-}
+export type JoinRequest = WpRequest & {
+    name?: string;
+    password?: string;
+};
 
-export interface JoinRequest {
-  name?: string;
-  password?: string;
-}
-
-export interface JoinResponse {
-  name?: string;
-  password?: string;
-}
+export type JoinResponse = WpResponse & {
+    /** @format int32 */
+    customErrorCode?: number;
+    name?: string;
+    password?: string;
+};
