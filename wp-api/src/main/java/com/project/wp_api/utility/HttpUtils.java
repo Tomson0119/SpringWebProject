@@ -1,6 +1,6 @@
 package com.project.wp_api.utility;
 
-import com.project.wp_common.logManage.WpLogger;
+import com.project.wp_common.utility.logManage.WpLogger;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.io.IOException;
@@ -62,7 +62,7 @@ public class HttpUtils {
             logger.forInfoLog()
                   .message(stringBuilder.toString())
                   .log();
-            
+
         } catch (IOException exception) {
             logger.forErrorLog()
                   .exception(exception)

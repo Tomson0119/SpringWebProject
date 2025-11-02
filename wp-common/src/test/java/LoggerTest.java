@@ -1,5 +1,5 @@
-import com.project.wp_common.logManage.WpLogManager;
-import com.project.wp_common.logManage.WpLogger;
+import com.project.wp_common.utility.logManage.WpLogManager;
+import com.project.wp_common.utility.logManage.WpLogger;
 import org.junit.jupiter.api.Test;
 
 public class LoggerTest {

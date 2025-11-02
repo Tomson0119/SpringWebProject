@@ -1,4 +1,4 @@
-package com.project.wp_common.logManage;
+package com.project.wp_common.utility.logManage;
 
 public final class WpLogManager {
 

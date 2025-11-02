@@ -1,6 +1,5 @@
-package com.project.wp_common.logManage;
+package com.project.wp_common.utility.logManage;
 
-import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
