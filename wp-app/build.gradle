@@ -11,6 +11,8 @@ repositories {
 
 dependencies {
     implementation(project(":wp-api"))
+    implementation(project(":wp-domain"))
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
