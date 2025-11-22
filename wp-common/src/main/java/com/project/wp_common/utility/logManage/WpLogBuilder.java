@@ -9,9 +9,8 @@ public class WpLogBuilder {
 
     private final WpLogger wpLogger;
     private final Level logLevel;
-
-    private String message;
     private final List<String> parameters = new ArrayList<>();
+    private String message;
 
     public WpLogBuilder(WpLogger wpLogger, Level logLevel) {
         this.wpLogger = wpLogger;
@@ -28,8 +27,8 @@ public class WpLogBuilder {
         return this;
     }
 
-    public WpLogBuilder parameter(String param) {
-        parameters.add(param);
+    public WpLogBuilder parameter(Object param) {
+        parameters.add(param.toString());
         return this;
     }
 
