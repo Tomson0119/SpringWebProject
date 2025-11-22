@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Schema(allOf = WpRequest.class)
-public class JoinRequest extends WpRequest {
+public final class JoinRequest extends WpRequest {
     private String name;
     private String password;
 }

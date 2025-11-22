@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @Schema(allOf = WpResponse.class)
-public class LoginResponse extends WpResponse {
+public final class LoginResponse extends WpResponse {
     private String name;
     private String password;
 }
