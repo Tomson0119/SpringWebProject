@@ -10,33 +10,38 @@
  * ---------------------------------------------------------------
  */
 
-export type LoginRequest = WpRequest & {
-    name?: string;
-    password?: string;
-};
-
-export type WpRequest = object;
-
-export type LoginResponse = WpResponse & {
-    /** @format int32 */
-    customErrorCode?: number;
-    name?: string;
-    password?: string;
-};
-
-export interface WpResponse {
-    /** @format int32 */
-    customErrorCode?: number;
+/** CustomErrorCode */
+export enum CustomErrorCode {
+  TEST_01 = "TEST_01",
+  TEST_02 = "TEST_02",
 }
 
+export type LoginRequest = WpRequest & {
+  name?: string;
+  password?: string;
+};
+
+export type WpRequest = any;
+
+export type LoginResponse = WpResponse & {
+  name?: string;
+  password?: string;
+};
+
+export type WpResponse = any;
+
 export type JoinRequest = WpRequest & {
-    name?: string;
-    password?: string;
+  name?: string;
+  password?: string;
 };
 
 export type JoinResponse = WpResponse & {
-    /** @format int32 */
-    customErrorCode?: number;
-    name?: string;
-    password?: string;
+  name?: string;
+  password?: string;
 };
+
+export interface WpErrorResponse {
+  /** CustomErrorCode */
+  customErrorCode?: CustomErrorCode;
+  errorMessage?: string;
+}

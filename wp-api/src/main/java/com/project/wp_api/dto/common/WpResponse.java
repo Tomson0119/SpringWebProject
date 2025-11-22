@@ -6,5 +6,4 @@ import lombok.Setter;
 @Getter
 @Setter
 public class WpResponse implements WpDto {
-    private int customErrorCode;
 }
