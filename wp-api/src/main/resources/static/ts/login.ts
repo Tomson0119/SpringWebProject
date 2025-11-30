@@ -1,20 +1,32 @@
-import { LoginRequest, LoginResponse } from "./common/type/model";
+import { LoginRequest, LoginResponse, WpErrorResponse, CustomErrorCode } from "./common/type/model.js";
 import * as HtmlUtility from "./common/utility/htmlUtility.js";
-import { post } from "./common/utility/httpUtility.js";
+import { isWpErrorResponse, post } from "./common/utility/httpUtility.js";
 
-async function postLogin(name: string, password: string): Promise<LoginResponse | null> {
+async function postLogin(name: string, password: string) {
     var loginRequest: LoginRequest = {
         name: name,
         password: password,
     };
 
     const response = await post("/login", loginRequest);
-    if (response.ok == false) {
-        return null;
+
+    if (isWpErrorResponse(response)) {
+        const wpResponse = await response.json();
+        const errorResponse: WpErrorResponse = wpResponse as WpErrorResponse;
+        const errorCode: CustomErrorCode = errorResponse.customErrorCode;
+
+        if (errorCode == CustomErrorCode.MEMBER_NOT_FOUND) {
+            const errorMessageText = HtmlUtility.getElement("login-error-message");
+            errorMessageText.innerText = "아이디 혹은 비밀번호를 잘못 입력하였습니다.";
+            errorMessageText.style.display = "flex";
+            return;
+        }
+
+        return;
     }
 
-    const loginResponse: LoginResponse = await response.json();
-    return loginResponse;
+    console.log(`Login succeeded - ${response.status}`);
+    window.location.href = response.url;
 }
 
 async function sendLoginRequest() {
@@ -31,22 +43,7 @@ async function sendLoginRequest() {
         return;
     }
 
-    console.log(`name: ${inputName}`);
-    console.log(`pwd: ${inputPassword}`);
-
-    const memberInfo = await postLogin(inputName, inputPassword);
-
-    if (memberInfo == null) {
-        console.error("Failed to login");
-        return;
-    }
-
-    if (memberInfo.name != inputName || memberInfo.password != inputPassword) {
-        console.error(`invalid server response: (${memberInfo.name}, ${memberInfo.password})`);
-        return;
-    }
-
-    console.log("login succeeded");
+    await postLogin(inputName, inputPassword);
 }
 
 async function main() {

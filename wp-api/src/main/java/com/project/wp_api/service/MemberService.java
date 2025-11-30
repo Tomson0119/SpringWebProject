@@ -1,13 +1,13 @@
 package com.project.wp_api.service;
 
+import com.project.wp_api.dto.common.enums.CustomErrorCode;
+import com.project.wp_api.exception.WpException;
 import com.project.wp_common.utility.logManage.WpLogManager;
 import com.project.wp_common.utility.logManage.WpLogger;
 import com.project.wp_domain.entity.Member;
 import com.project.wp_domain.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -23,40 +23,44 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-    public int tryJoin(String memberName, String password) {
+    public Member join(String memberName, String password) {
         var existingMember = findMemberByName(memberName);
         if (existingMember.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Duplicated member name");
+            throw new WpException(CustomErrorCode.DUPLICATED_MEMBER_NAME);
         }
 
         var member = new Member();
         member.setName(memberName);
         member.setPassword(password);
 
-        var result = memberRepository.save(member);
-        if (member != result) {
-            logger.forErrorLog()
-                  .message("Invalid result")
-                  .parameter(result)
-                  .log();
-            return -1;
-        }
-
         logger.forInfoLog()
-              .message("Succeeded to save new member")
-              .parameter(member.getUid())
+              .message("Joined new member")
+              .parameter(member.getId())
               .parameter(member.getName())
-              .parameter(member.getPassword())
               .log();
 
-        return 0;
+        return memberRepository.save(member);
     }
 
     public Optional<Member> findMemberById(long uid) {
-        return Optional.empty();
+        return memberRepository.findById(uid);
     }
 
     public Optional<Member> findMemberByName(String memberName) {
         return memberRepository.findByName(memberName);
+    }
+
+    public boolean tryLogin(String memberName, String password) {
+        var member = findMemberByName(memberName);
+        if (member.isEmpty()) {
+            throw new WpException(CustomErrorCode.MEMBER_NOT_FOUND);
+        }
+
+        var validPassword = member.get().getPassword();
+        if (validPassword.equals(password) == false) {
+            throw new WpException(CustomErrorCode.INVALID_PASSWORD);
+        }
+
+        return true;
     }
 }

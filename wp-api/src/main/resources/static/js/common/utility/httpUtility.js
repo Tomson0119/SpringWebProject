@@ -7,6 +7,9 @@ class HttpRequestWrapper {
         return this.httpRequest;
     }
 }
+export function isWpErrorResponse(response) {
+    return response.status >= 400;
+}
 export function get(path, additionalHeaders = null) {
     return sendHttpRequest(path, "get", null, additionalHeaders);
 }

@@ -1,6 +1,6 @@
 body {
     font-family: Verdana;
-    font-size:30px;
+    font-size: 30px;
     background-color: white;
     display: flex;
     justify-content: center;
@@ -8,18 +8,24 @@ body {
     height: 100vh;
 }
 
+.container {
+    text-align: center;
+    padding: 50px;
+}
+
 .login-box {
     background: white;
-    padding: 30px;
     border-radius: 10px;
-    box-shadow: rgba(0,0,0,0.1);
-    width: 300px;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: rgba(0, 0, 0, 0.1);
 }
 
 .login-box h2 {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     color: #333;
+    font-size: 30px;
 }
 
 .login-box input {
@@ -34,7 +40,7 @@ body {
 .login-box button {
     width: 100%;
     padding: 10px;
-    background-color: #4CAF50;
+    background-color: #4caf50;
     color: white;
     border: none;
     border-radius: 5px;
@@ -44,4 +50,32 @@ body {
 
 .login-box button:hover {
     background-color: #45a049;
+}
+
+.login-box .login-error-message {
+    color: red;
+    font-size: 13px;
+    margin: 1px;
+    display: none;
+}
+
+.account-helpers {
+    margin: 1px;
+    padding: 1px;
+    display: flex;
+    font-size: 15px;
+    margin: 10px;
+    gap: 20px;
+    align-items: center;
+}
+
+.account-helpers a {
+    text-decoration: none;
+    color: #444;
+}
+
+.account-helpers .seperator {
+    background-color: #444;
+    width: 1px;
+    height: 15px;
 }

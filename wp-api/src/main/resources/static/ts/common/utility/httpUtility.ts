@@ -10,18 +10,15 @@ class HttpRequestWrapper {
     }
 }
 
-export function get(
-    path: string,
-    additionalHeaders: Record<string, string> | null = null
-): Promise<Response> {
+export function isWpErrorResponse(response: Response): boolean {
+    return response.status >= 400;
+}
+
+export function get(path: string, additionalHeaders: Record<string, string> | null = null): Promise<Response> {
     return sendHttpRequest(path, "get", null, additionalHeaders);
 }
 
-export function post(
-    path: string,
-    request: any,
-    additionalHeaders: Record<string, string> | null = null
-): Promise<Response> {
+export function post(path: string, request: any, additionalHeaders: Record<string, string> | null = null): Promise<Response> {
     return sendHttpRequest(path, "post", new HttpRequestWrapper(request), additionalHeaders);
 }
 
