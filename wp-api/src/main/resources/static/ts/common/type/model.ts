@@ -10,38 +10,36 @@
  * ---------------------------------------------------------------
  */
 
-/** CustomErrorCode */
 export enum CustomErrorCode {
-  TEST_01 = "TEST_01",
-  TEST_02 = "TEST_02",
+    UNDEFINED = "UNDEFINED",
+    MEMBER_NOT_FOUND = "MEMBER_NOT_FOUND",
+    INVALID_PASSWORD = "INVALID_PASSWORD",
+    DUPLICATED_MEMBER_NAME = "DUPLICATED_MEMBER_NAME",
 }
 
 export type LoginRequest = WpRequest & {
-  name?: string;
-  password?: string;
+    name?: string;
+    password?: string;
 };
 
 export type WpRequest = any;
 
-export type LoginResponse = WpResponse & {
-  name?: string;
-  password?: string;
-};
+export type LoginResponse = WpResponse;
 
 export type WpResponse = any;
 
 export type JoinRequest = WpRequest & {
-  name?: string;
-  password?: string;
+    name?: string;
+    password?: string;
 };
 
 export type JoinResponse = WpResponse & {
-  name?: string;
-  password?: string;
+    /** @format int64 */
+    memberId?: number;
+    memberName?: string;
 };
 
-export interface WpErrorResponse {
-  /** CustomErrorCode */
-  customErrorCode?: CustomErrorCode;
-  errorMessage?: string;
-}
+export type WpErrorResponse = WpResponse & {
+    customErrorCode?: CustomErrorCode;
+    errorMessage?: string;
+};
