@@ -1,43 +1,43 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8" />
-        <title>Inspier - 로그인</title>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Inspier - 로그인</title>
 
-        <link href="image/favicon.ico" rel="icon" />
-        <link href="image/favicon.ico" rel="shorcut icon" />
+    <link href="image/favicon.ico" rel="icon"/>
+    <link href="image/favicon.ico" rel="shorcut icon"/>
 
-        <link href="image/icon-180x180.png" rel="icon" sizes="180x180" type="image/png" />
-        <link href="image/icon-180x180.png" rel="apple-touch-icon" sizes="180x180" type="image/png" />
+    <link href="image/icon-180x180.png" rel="icon" sizes="180x180" type="image/png"/>
+    <link href="image/icon-180x180.png" rel="apple-touch-icon" sizes="180x180" type="image/png"/>
 
-        <link href="image/icon-192x192.png" rel="icon" sizes="192x192" type="image/png" />
-        <link href="image/icon-192x192.png" rel="apple-touch-ico" sizes="192x192" type="image/png" />
+    <link href="image/icon-192x192.png" rel="icon" sizes="192x192" type="image/png"/>
+    <link href="image/icon-192x192.png" rel="apple-touch-ico" sizes="192x192" type="image/png"/>
 
-        <link href="image/icon-512x512.png" rel="icon" sizes="512x512" type="image/png" />
-        <link href="image/icon-512x512.png" rel="apple-touch-icon" sizes="512x512" type="image/png" />
+    <link href="image/icon-512x512.png" rel="icon" sizes="512x512" type="image/png"/>
+    <link href="image/icon-512x512.png" rel="apple-touch-icon" sizes="512x512" type="image/png"/>
 
-        <link rel="stylesheet" th:href="@{/css/login.css}" />
-        <script defer th:src="@{/js/login.js}" type="module"></script>
-    </head>
-    <body>
-        <div class="header"></div>
-        <div class="container">
-            <div class="login-box">
-                <h2>로그인</h2>
+    <link rel="stylesheet" th:href="@{/css/login.css}"/>
+    <script defer th:src="@{/js/login.js}" type="module"></script>
+</head>
+<body>
+<div class="header"></div>
+<div class="container">
+    <div class="login-box">
+        <h2>로그인</h2>
 
-                <input id="name" placeholder="아이디" required type="text" />
-                <input id="password" placeholder="비밀번호" required type="password" />
-                <p id="login-error-message" class="login-error-message"></p>
-                <button id="loginButton" type="submit">로그인</button>
-            </div>
-            <div class="account-helpers">
-                <a class="find-id-link">아이디 찾기</a>
-                <span class="seperator"></span>
-                <a class="find-pw-link">비밀번호 찾기</a>
-                <span class="seperator"></span>
-                <a class="join-link" href="join">회원가입</a>
-            </div>
-        </div>
-        <div class="footer"></div>
-    </body>
+        <input id="name" placeholder="아이디" required type="text"/>
+        <input id="password" placeholder="비밀번호" required type="password"/>
+        <p class="login-error-message" id="login-error-message"></p>
+        <button id="loginButton" type="submit">로그인</button>
+    </div>
+    <div class="account-helpers">
+        <a class="find-id-link" href="/account/find-id">아이디 찾기</a>
+        <span class="seperator"></span>
+        <a class="find-pw-link">비밀번호 찾기</a>
+        <span class="seperator"></span>
+        <a class="join-link" href="/account/join">회원가입</a>
+    </div>
+</div>
+<div class="footer"></div>
+</body>
 </html>

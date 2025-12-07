@@ -1,9 +1,7 @@
-package com.project.wp_api.controller;
+package com.project.wp_api.controller.restApiController;
 
-import com.project.wp_api.dto.JoinRequest;
-import com.project.wp_api.dto.JoinResponse;
-import com.project.wp_api.dto.LoginRequest;
-import com.project.wp_api.dto.LoginResponse;
+import com.project.wp_api.dto.auth.LoginRequest;
+import com.project.wp_api.dto.auth.LoginResponse;
 import com.project.wp_api.dto.common.enums.CustomErrorCode;
 import com.project.wp_api.exception.WpException;
 import com.project.wp_api.service.MemberService;
@@ -18,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class MemberApiController {
+public class AuthApiController {
 
-    private static final WpLogger logger = WpLogManager.getClassLogger(MemberController.class);
+    private static final WpLogger logger = WpLogManager.getClassLogger(AuthApiController.class);
 
     @Autowired
     public MemberService memberService;
@@ -45,26 +43,6 @@ public class MemberApiController {
             .status(HttpStatus.FOUND)
             .header(HttpHeaders.LOCATION, "/")
             .body(response);
-    }
-
-    @PostMapping("/join")
-    public ResponseEntity<JoinResponse> join(@RequestBody JoinRequest request) {
-        var response = new JoinResponse();
-
-        logger.forTraceLog()
-              .message("Got join request")
-              .parameter(request.getName())
-              .parameter(request.getPassword())
-              .log();
-
-        var newMember = memberService.join(
-            request.getName(),
-            request.getPassword());
-
-        response.setMemberId(newMember.getId());
-        response.setMemberName(newMember.getName());
-
-        return ResponseEntity.ok(response);
     }
 }
 

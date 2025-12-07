@@ -1,4 +1,4 @@
-package com.project.wp_api.dto;
+package com.project.wp_api.dto.account;
 
 import com.project.wp_api.dto.common.WpRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
