@@ -14,7 +14,7 @@ public class OpenApiBootstrapController {
     @GetMapping("/__schema_bootstrap__")
     @Operation(summary = "스키마 부트스트랩")
     @ApiResponse(
-        responseCode = "200",
+        responseCode = "400",
         description = "스키마 생성용",
         content = @Content(schema = @Schema(implementation = WpErrorResponse.class))
     )

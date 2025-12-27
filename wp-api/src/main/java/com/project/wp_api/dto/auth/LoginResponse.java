@@ -1,8 +1,10 @@
 package com.project.wp_api.dto.auth;
 
 import com.project.wp_api.dto.common.WpResponse;
-import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-@Schema(allOf = WpResponse.class)
+@Setter
+@RequiredArgsConstructor
 public final class LoginResponse extends WpResponse {
 }
