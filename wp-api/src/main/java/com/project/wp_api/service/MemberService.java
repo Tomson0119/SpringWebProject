@@ -35,7 +35,6 @@ public class MemberService {
 
         logger.forInfoLog()
               .message("Joined new member")
-              .parameter(member.getId())
               .parameter(member.getName())
               .log();
 
