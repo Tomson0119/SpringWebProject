@@ -6,11 +6,10 @@ async function postLogin(name, password) {
         name: name,
         password: password,
     };
-    const response = await post("/login", loginRequest);
+    const response = await post("/auth/login", loginRequest);
+    const wpResponse = await response.json();
     if (isWpErrorResponse(response)) {
-        const wpResponse = await response.json();
-        const errorResponse = wpResponse;
-        const errorCode = errorResponse.customErrorCode;
+        const errorCode = wpResponse.customErrorCode;
         if (errorCode == CustomErrorCode.MEMBER_NOT_FOUND) {
             const errorMessageText = HtmlUtility.getElement("login-error-message");
             errorMessageText.innerText = "아이디 혹은 비밀번호를 잘못 입력하였습니다.";

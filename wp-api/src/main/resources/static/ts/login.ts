@@ -1,4 +1,4 @@
-import { LoginRequest, LoginResponse, WpErrorResponse, CustomErrorCode } from "./common/type/model.js";
+import { LoginRequest, CustomErrorCode } from "./common/type/model.js";
 import * as HtmlUtility from "./common/utility/htmlUtility.js";
 import { isWpErrorResponse, post } from "./common/utility/httpUtility.js";
 
@@ -8,13 +8,11 @@ async function postLogin(name: string, password: string) {
         password: password,
     };
 
-    const response = await post("/login", loginRequest);
+    const response = await post("/auth/login", loginRequest);
+    const wpResponse = await response.json();
 
     if (isWpErrorResponse(response)) {
-        const wpResponse = await response.json();
-        const errorResponse: WpErrorResponse = wpResponse as WpErrorResponse;
-        const errorCode: CustomErrorCode = errorResponse.customErrorCode;
-
+        const errorCode = wpResponse.customErrorCode;
         if (errorCode == CustomErrorCode.MEMBER_NOT_FOUND) {
             const errorMessageText = HtmlUtility.getElement("login-error-message");
             errorMessageText.innerText = "아이디 혹은 비밀번호를 잘못 입력하였습니다.";
