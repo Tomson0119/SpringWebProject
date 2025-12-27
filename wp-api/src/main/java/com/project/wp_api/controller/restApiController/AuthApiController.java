@@ -42,7 +42,7 @@ public class AuthApiController {
         }
 
         return ResponseEntity
-            .status(HttpStatus.FOUND)
+            .status(HttpStatus.SEE_OTHER)
             .header(HttpHeaders.LOCATION, "/")
             .body(response);
     }
