@@ -1,4 +1,4 @@
-import { CustomErrorCode, FindMemberRequest, JoinRequest } from "./common/type/model.js";
+import { CustomErrorCode, JoinRequest } from "./common/type/model.js";
 import { getInputElementText, getElement } from "./common/utility/htmlUtility.js";
 import { isWpErrorResponse, post, get } from "./common/utility/httpUtility.js";
 

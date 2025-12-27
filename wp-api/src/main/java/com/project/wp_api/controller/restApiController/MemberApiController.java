@@ -1,8 +1,8 @@
 package com.project.wp_api.controller.restApiController;
 
-import com.project.wp_api.dto.account.FindMemberResponse;
-import com.project.wp_api.dto.account.JoinRequest;
-import com.project.wp_api.dto.account.JoinResponse;
+import com.project.wp_api.dto.member.FindMemberResponse;
+import com.project.wp_api.dto.member.JoinRequest;
+import com.project.wp_api.dto.member.JoinResponse;
 import com.project.wp_api.dto.common.enums.CustomErrorCode;
 import com.project.wp_api.exception.WpException;
 import com.project.wp_api.service.MemberService;
