@@ -10,8 +10,17 @@ class HttpRequestWrapper {
 export function isWpErrorResponse(response) {
     return response.status >= 400;
 }
-export function get(path, additionalHeaders = null) {
-    return sendHttpRequest(path, "get", null, additionalHeaders);
+export function get(path, queryParams = null, additionalHeaders = null) {
+    let finalPath = path;
+    if (queryParams != null) {
+        finalPath += "?";
+        Object.keys(queryParams).forEach((key) => {
+            const value = queryParams[key];
+            finalPath += `${key}=${value}&`;
+        });
+        finalPath.slice(0, -1);
+    }
+    return sendHttpRequest(finalPath, "get", null, additionalHeaders);
 }
 export function post(path, request, additionalHeaders = null) {
     return sendHttpRequest(path, "post", new HttpRequestWrapper(request), additionalHeaders);

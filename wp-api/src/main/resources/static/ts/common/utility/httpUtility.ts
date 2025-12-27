@@ -14,8 +14,24 @@ export function isWpErrorResponse(response: Response): boolean {
     return response.status >= 400;
 }
 
-export function get(path: string, additionalHeaders: Record<string, string> | null = null): Promise<Response> {
-    return sendHttpRequest(path, "get", null, additionalHeaders);
+export function get(
+    path: string,
+    queryParams: Record<string, string> | null = null,
+    additionalHeaders: Record<string, string> | null = null
+): Promise<Response> {
+    let finalPath = path;
+    if (queryParams != null) {
+        finalPath += "?";
+
+        Object.keys(queryParams).forEach((key) => {
+            const value = queryParams[key];
+            finalPath += `${key}=${value}&`;
+        });
+
+        finalPath.slice(0, -1);
+    }
+
+    return sendHttpRequest(finalPath, "get", null, additionalHeaders);
 }
 
 export function post(path: string, request: any, additionalHeaders: Record<string, string> | null = null): Promise<Response> {
