@@ -4,17 +4,7 @@
         <meta charset="UTF-8" />
         <title>Inspier - 회원가입</title>
 
-        <link href="/image/favicon.ico" rel="icon" />
-        <link href="/image/favicon.ico" rel="shorcut icon" />
-
-        <link href="/image/icon-180x180.png" rel="icon" sizes="180x180" type="image/png" />
-        <link href="/image/icon-180x180.png" rel="apple-touch-icon" sizes="180x180" type="image/png" />
-
-        <link href="/image/icon-192x192.png" rel="icon" sizes="192x192" type="image/png" />
-        <link href="/image/icon-192x192.png" rel="apple-touch-ico" sizes="192x192" type="image/png" />
-
-        <link href="/image/icon-512x512.png" rel="icon" sizes="512x512" type="image/png" />
-        <link href="/image/icon-512x512.png" rel="apple-touch-icon" sizes="512x512" type="image/png" />
+        <th:block th:replace="common/common-tags::common-favicons" />
 
         <link rel="stylesheet" th:href="@{/css/join.css}" />
         <script defer th:src="@{/js/join.js}" type="module"></script>
