@@ -58,12 +58,12 @@ body {
     background-color: #45a049;
 }
 
-.id-container {
+.name-container {
     flex-direction: row;
     display: flex;
     gap: 5px;
 }
 
-.id-container .input-id {
+.name-container .input-name {
     width: 200%;
 }

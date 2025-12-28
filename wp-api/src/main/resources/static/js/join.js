@@ -1,11 +1,11 @@
 import { getInputElementText, getElement } from "./common/utility/htmlUtility.js";
 import { isWpErrorResponse, post, get } from "./common/utility/httpUtility.js";
 async function sendJoinRequest() {
-    const id = getInputElementText("input-id");
+    const name = getInputElementText("input-name");
     const password = getInputElementText("input-password");
-    // id 검증
-    if (validateId(id) == false) {
-        console.error("input id is not valid");
+    // name 검증
+    if (validateName(name) == false) {
+        console.error("input name is not valid");
         return;
     }
     // password 검증
@@ -14,7 +14,7 @@ async function sendJoinRequest() {
         return;
     }
     const request = {
-        name: id,
+        name: name,
         password: password,
     };
     const response = await post("/members", request);
@@ -27,13 +27,13 @@ async function sendJoinRequest() {
     const memberUri = response.headers.get("location");
     console.info(`location: ${memberUri}`);
 }
-async function callCheckIdApi() {
-    const id = getInputElementText("input-id");
-    if (validateId(id) == false) {
-        console.warn(`Failed to validate id: ${id}`);
+async function callCheckNameApi() {
+    const name = getInputElementText("input-name");
+    if (validateName(name) == false) {
+        console.warn(`Failed to validate name: ${name}`);
         return;
     }
-    const response = await get("/members/check-name", { name: id });
+    const response = await get("/members/check-name", { name: name });
     if (isWpErrorResponse(response)) {
         const wpErrorResponse = (await response.json());
         console.error(`Failed to check name: ${wpErrorResponse.customErrorCode}`);
@@ -41,14 +41,14 @@ async function callCheckIdApi() {
     }
     console.log("Input name is not duplicated");
 }
-function checkInputId() {
-    const id = getInputElementText("input-id");
-    if (validateId(id) == false) {
-        console.error("input id is not valid");
+function checkInputName() {
+    const name = getInputElementText("input-name");
+    if (validateName(name) == false) {
+        console.error("input name is not valid");
         return;
     }
 }
-function validateId(id) {
+function validateName(name) {
     return true;
 }
 function checkInputPassword() {
@@ -75,12 +75,12 @@ function main() {
     // join-button 클릭 이벤트
     const join_button = getElement("join-button");
     join_button.addEventListener("click", sendJoinRequest);
-    // check-id 클릭 이벤트
-    const check_id_button = getElement("check-id");
-    check_id_button.addEventListener("click", callCheckIdApi);
-    // input-id 포커스 이벤트
-    const input_id = getElement("input-id");
-    input_id.addEventListener("blur", checkInputId);
+    // check-name 클릭 이벤트
+    const check_name_button = getElement("check-name");
+    check_name_button.addEventListener("click", callCheckNameApi);
+    // input-name 포커스 이벤트
+    const input_name = getElement("input-name");
+    input_name.addEventListener("blur", checkInputName);
     // input-password 포커스 이벤트
     const input_pw = getElement("input-password");
     input_pw.addEventListener("blur", checkInputPassword);
