@@ -1,4 +1,3 @@
-import { CustomErrorCode } from "./common/type/model.js";
 import { getInputElementText, getElement } from "./common/utility/htmlUtility.js";
 import { isWpErrorResponse, post, get } from "./common/utility/httpUtility.js";
 async function sendJoinRequest() {
@@ -14,37 +13,33 @@ async function sendJoinRequest() {
         console.error("input pwd is not valid");
         return;
     }
-    var request = {
+    const request = {
         name: id,
         password: password,
     };
-    var response = await post("/members", request);
-    var wpResponse = await response.json();
+    const response = await post("/members", request);
+    const wpResponse = await response.json();
     if (isWpErrorResponse(response)) {
-        const errorCode = wpResponse.customErrorCode;
-        console.error(`failed to join: ${errorCode}`);
+        const wpErrorResponse = wpResponse;
+        console.error(`Failed to join: ${wpErrorResponse.customErrorCode}`);
         return;
     }
     const memberUri = response.headers.get("location");
     console.info(`location: ${memberUri}`);
-    console.info(wpResponse);
 }
-async function findMemberByName() {
+async function callCheckIdApi() {
     const id = getInputElementText("input-id");
     if (validateId(id) == false) {
+        console.warn(`Failed to validate id: ${id}`);
         return;
     }
-    const response = await get("/members", { memberName: id });
-    const wpResponse = await response.json();
+    const response = await get("/members/check-name", { name: id });
     if (isWpErrorResponse(response)) {
-        if (wpResponse.customErrorCode == CustomErrorCode.MEMBER_NOT_FOUND) {
-            console.info("not duplicated id");
-            return;
-        }
-        console.error(`Failed find member: ${wpResponse.customErrorCode}`);
+        const wpErrorResponse = (await response.json());
+        console.error(`Failed to check name: ${wpErrorResponse.customErrorCode}`);
         return;
     }
-    console.error("id is duplicated");
+    console.log("Input name is not duplicated");
 }
 function checkInputId() {
     const id = getInputElementText("input-id");
@@ -82,7 +77,7 @@ function main() {
     join_button.addEventListener("click", sendJoinRequest);
     // check-id 클릭 이벤트
     const check_id_button = getElement("check-id");
-    check_id_button.addEventListener("click", findMemberByName);
+    check_id_button.addEventListener("click", callCheckIdApi);
     // input-id 포커스 이벤트
     const input_id = getElement("input-id");
     input_id.addEventListener("blur", checkInputId);

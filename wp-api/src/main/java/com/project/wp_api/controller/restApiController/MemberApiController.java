@@ -25,8 +25,6 @@ public class MemberApiController {
 
     @PostMapping
     public ResponseEntity<JoinResponse> join(@RequestBody JoinRequest request) {
-        var response = new JoinResponse();
-
         logger.forInfoLog()
               .message("Got join request")
               .parameter(request.getName())
@@ -37,8 +35,9 @@ public class MemberApiController {
             request.getName(),
             request.getPassword());
 
-        response.setMemberId(newMember.getId());
-        response.setMemberName(newMember.getName());
+        var response = new JoinResponse(
+            newMember.getId(),
+            newMember.getName());
 
         return ResponseEntity
             .status(HttpStatus.CREATED)
@@ -46,34 +45,42 @@ public class MemberApiController {
             .body(response);
     }
 
-    @GetMapping("/{memberId}")
-    public ResponseEntity<FindMemberResponse> findById(@PathVariable("memberId") Long memberId) {
-        var response = new FindMemberResponse();
+    @GetMapping("/check-name")
+    public ResponseEntity<Void> checkNameDuplication(@RequestParam("name") String memberName) {
+        var findResult = memberService.findMemberByName(memberName);
+        if (findResult.isPresent()) {
+            throw new WpException(CustomErrorCode.DUPLICATED_MEMBER_NAME);
+        }
 
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<FindMemberResponse> findById(@PathVariable("id") Long memberId) {
         var findResult = memberService.findMemberById(memberId);
         if (findResult.isEmpty()) {
             throw new WpException(CustomErrorCode.MEMBER_NOT_FOUND);
         }
 
         var member = findResult.get();
-        response.setMemberId(member.getId());
-        response.setMemberName(member.getName());
+        var response = new FindMemberResponse(
+            member.getId(),
+            member.getName());
 
         return ResponseEntity.ok(response);
     }
 
     @GetMapping
-    public ResponseEntity<FindMemberResponse> findByName(@RequestParam("memberName") String memberName) {
-        var response = new FindMemberResponse();
-
+    public ResponseEntity<FindMemberResponse> findByName(@RequestParam("name") String memberName) {
         var findResult = memberService.findMemberByName(memberName);
         if (findResult.isEmpty()) {
             throw new WpException(CustomErrorCode.MEMBER_NOT_FOUND);
         }
 
         var member = findResult.get();
-        response.setMemberId(member.getId());
-        response.setMemberName(member.getName());
+        var response = new FindMemberResponse(
+            member.getId(),
+            member.getName());
 
         return ResponseEntity.ok(response);
     }
