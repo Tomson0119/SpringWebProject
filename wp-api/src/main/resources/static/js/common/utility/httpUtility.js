@@ -18,7 +18,7 @@ export function get(path, queryParams = null, additionalHeaders = null) {
             const value = queryParams[key];
             finalPath += `${key}=${value}&`;
         });
-        finalPath.slice(0, -1);
+        finalPath = finalPath.slice(0, -1);
     }
     return sendHttpRequest(finalPath, "get", null, additionalHeaders);
 }
