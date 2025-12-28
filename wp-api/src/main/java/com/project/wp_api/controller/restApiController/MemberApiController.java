@@ -55,6 +55,24 @@ public class MemberApiController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/find-pw")
+    public ResponseEntity<Void> findPassword(@RequestParam("name") String memberName) {
+
+        logger.forInfoLog()
+              .message("Got find pw request")
+              .parameter(memberName)
+              .log();
+
+        var findResult = memberService.findMemberByName(memberName);
+        if (findResult.isEmpty()) {
+            throw new WpException(CustomErrorCode.MEMBER_NOT_FOUND);
+        }
+
+        //TODO: 등록된 이메일로 임시 비밀번호 전송
+
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<FindMemberResponse> findById(@PathVariable("id") Long memberId) {
         var findResult = memberService.findMemberById(memberId);

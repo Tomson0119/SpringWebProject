@@ -9,4 +9,9 @@ public class MemberController {
     public String join() {
         return "join";
     }
+
+    @GetMapping("/account/find-pw")
+    public String findPassword() {
+        return "account/find-pw";
+    }
 }
