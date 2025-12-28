@@ -1,7 +1,6 @@
 package com.project.wp_api.controller.restApiController;
 
 import com.project.wp_api.dto.auth.LoginRequest;
-import com.project.wp_api.dto.auth.LoginResponse;
 import com.project.wp_api.dto.common.enums.CustomErrorCode;
 import com.project.wp_api.exception.WpException;
 import com.project.wp_api.service.MemberService;
@@ -26,12 +25,9 @@ public class AuthApiController {
     public MemberService memberService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
-        var response = new LoginResponse();
+    public ResponseEntity<Void> login(@RequestBody LoginRequest request) {
 
-        //TODO: 그냥 보내면 유출될 수 있으므로 암호화 등의 방식을 사용하도록 변경
-
-        logger.forTraceLog()
+        logger.forInfoLog()
               .message("Got login request")
               .parameter(request.getName())
               .log();
@@ -44,7 +40,7 @@ public class AuthApiController {
         return ResponseEntity
             .status(HttpStatus.SEE_OTHER)
             .header(HttpHeaders.LOCATION, "/")
-            .body(response);
+            .build();
     }
 }
 

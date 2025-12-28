@@ -33,8 +33,6 @@ export interface LoginRequest {
     password?: string;
 }
 
-export type LoginResponse = any;
-
 export interface FindMemberResponse {
     /** @format int64 */
     memberId?: number;

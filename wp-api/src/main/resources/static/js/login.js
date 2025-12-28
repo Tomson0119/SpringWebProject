@@ -7,9 +7,9 @@ async function postLogin(name, password) {
         password: password,
     };
     const response = await post("/auth/login", loginRequest);
-    const wpResponse = await response.json();
     if (isWpErrorResponse(response)) {
-        const errorCode = wpResponse.customErrorCode;
+        const wpErrorResponse = await response.json();
+        const errorCode = wpErrorResponse.customErrorCode;
         if (errorCode == CustomErrorCode.MEMBER_NOT_FOUND) {
             const errorMessageText = HtmlUtility.getElement("login-error-message");
             errorMessageText.innerText = "아이디 혹은 비밀번호를 잘못 입력하였습니다.";
