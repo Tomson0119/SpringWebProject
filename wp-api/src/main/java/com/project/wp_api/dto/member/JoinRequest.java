@@ -6,5 +6,6 @@ import lombok.Getter;
 @Getter
 public final class JoinRequest extends WpRequest {
     private String name;
+    private String emailAddress;
     private String password;
 }
