@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Inspier - 비밀번호 찾기</title>
+
+        <th:block th:replace="~{common/common-tags::common-favicons}" />
+
+        <link rel="stylesheet" th:href="@{/css/find-pw.css}" />
+        <script defer th:src="@{/js/find-pw.js}" type="module"></script>
+    </head>
+    <body>
+        <div class="header"></div>
+        <div class="container">
+            <div class="find-box">
+                <h2>비밀번호 찾기</h2>
+
+                <div class="input-group">
+                    <input class="input-name" id="input-name" placeholder="아이디" required type="text" />
+                    <button id="find-pw-button" type="submit">확인</button>
+                </div>
+
+                <p class="invalid-name-error" id="invalid-name-error">존재하지 않는 아이디입니다.</p>
+                <p class="success-message" id="success-message">등록된 이메일로 비밀번호 재설정 링크를 전송하였습니다.</p>
+            </div>
+        </div>
+
+        <div class="footer"></div>
+    </body>
+</html>

@@ -1,0 +1,97 @@
+body {
+    font-family: Verdana;
+    font-size: 30px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    text-align: center;
+    padding: 50px;
+}
+
+.find-box {
+    background: white;
+    border-radius: 10px;
+    padding: 40px;
+    padding-top: 20px;
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.find-box h2 {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 22px;
+    margin-left: 0;
+    margin-right: auto;
+    text-align: left;
+    width: 100%;
+}
+
+.find-box input {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 15px;
+    padding: 12px;
+}
+
+.invalid-name-error {
+    color: red;
+    font-size: 13px;
+    margin-left: 0;
+    margin-right: auto;
+    margin: 1px;
+    width: 100%;
+    text-align: left;
+    display: none;
+}
+
+.success-message {
+    color: green;
+    font-size: 13px;
+    margin-left: 0;
+    margin-right: auto;
+    margin: 1px;
+    width: 100%;
+    text-align: left;
+    display: none;
+}
+
+.input-group {
+    display: flex;
+    margin-left: 0;
+    margin-right: auto;
+    width: 100%;
+}
+
+.input-group button {
+    margin: 5px;
+    padding: 12px;
+    width: 50%;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background-color 0.25s ease;
+}
+
+.input-group button:hover {
+    background-color: #45a049;
+}
+
+.input-group button:disabled {
+    background-color: gray;
+}
