@@ -49,8 +49,11 @@ public class WpLogBuilder {
 
     private String buildMessage() {
         var stringBuilder = new StringBuilder();
-        stringBuilder.append(message);
 
+        if (message != null) {
+            stringBuilder.append(message);
+        }
+        
         if (parameters.isEmpty() == false) {
             stringBuilder.append('|');
         }
