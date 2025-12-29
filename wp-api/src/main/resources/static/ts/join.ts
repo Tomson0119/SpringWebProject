@@ -36,7 +36,7 @@ async function sendJoinRequest() {
     console.info(`location: ${memberUri}`);
 }
 
-async function callCheckNameApi() {
+async function sendCheckNameRequest() {
     const name = getInputElementText("input-name");
     if (validateName(name) == false) {
         console.warn(`Failed to validate name: ${name}`);
@@ -53,12 +53,29 @@ async function callCheckNameApi() {
     console.log("Input name is not duplicated");
 }
 
+async function sendCheckEmailRequest() {
+    const address = getInputElementText("input-email");
+    console.log(address);
+}
+
 function checkInputName() {
     const name = getInputElementText("input-name");
     if (validateName(name) == false) {
         console.error("input name is not valid");
         return;
     }
+}
+
+function checkInputEmail() {
+    const address = getInputElementText("input-email");
+    if (validateEmailAddress(address) == false) {
+        console.error("input email is not valid");
+        return;
+    }
+}
+
+function validateEmailAddress(address: string): boolean {
+    return true;
 }
 
 function validateName(name: string): boolean {
@@ -95,11 +112,19 @@ function main() {
 
     // check-name 클릭 이벤트
     const check_name_button = getElement("check-name");
-    check_name_button.addEventListener("click", callCheckNameApi);
+    check_name_button.addEventListener("click", sendCheckNameRequest);
 
     // input-name 포커스 이벤트
     const input_name = getElement("input-name");
     input_name.addEventListener("blur", checkInputName);
+
+    // input-email 입력 이벤트
+    const input_email = getElement("input-email");
+    input_email.addEventListener("input", checkInputEmail);
+
+    // check-email 클릭 이벤트
+    const check_email = getElement("check-email");
+    check_email.addEventListener("click", sendCheckEmailRequest);
 
     // input-password 포커스 이벤트
     const input_pw = getElement("input-password");
