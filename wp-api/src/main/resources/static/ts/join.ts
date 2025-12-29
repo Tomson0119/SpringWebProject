@@ -1,4 +1,4 @@
-import { JoinRequest, WpErrorResponse } from "./common/type/model.js";
+import { CustomErrorCode, JoinRequest, WpErrorResponse } from "./common/type/model.js";
 import { getInputElementText, getElement } from "./common/utility/htmlUtility.js";
 import { isWpErrorResponse, post, get } from "./common/utility/httpUtility.js";
 
@@ -37,25 +37,63 @@ async function sendJoinRequest() {
 }
 
 async function sendCheckNameRequest() {
-    const name = getInputElementText("input-name");
+    const input_name = getElement("input-name") as HTMLInputElement;
+    const name = input_name.value;
     if (validateName(name) == false) {
         console.warn(`Failed to validate name: ${name}`);
         return;
     }
 
+    const name_duplication_error = getElement("name-duplication-error");
     const response = await get("/members/check-name", { name: name });
     if (isWpErrorResponse(response)) {
         const wpErrorResponse = (await response.json()) as WpErrorResponse;
-        console.error(`Failed to check name: ${wpErrorResponse.customErrorCode}`);
+
+        if (wpErrorResponse.customErrorCode == CustomErrorCode.DUPLICATED_MEMBER_NAME) {
+            name_duplication_error.style.display = "flex";
+            input_name.style.borderColor = "red";
+            input_name.style.borderWidth = "2px";
+            return;
+        }
+
+        console.error(`Failed to check name: ${wpErrorResponse.customErrorCode} (${wpErrorResponse.errorMessage})`);
         return;
     }
+
+    name_duplication_error.style.display = "none";
+    input_name.style.borderColor = "green";
+    input_name.style.borderWidth = "2px";
 
     console.log("Input name is not duplicated");
 }
 
 async function sendCheckEmailRequest() {
-    const address = getInputElementText("input-email");
-    console.log(address);
+    const input_email = getElement("input-email") as HTMLInputElement;
+    const email = input_email.value;
+    if (validateEmailAddress(email) == false) {
+        console.error("input email is not valid");
+        return;
+    }
+
+    const email_duplication_error = getElement("email-duplication-error");
+    const response = await get("/members/check-email", { email: email });
+    if (isWpErrorResponse(response)) {
+        const wpErrorResponse: WpErrorResponse = await response.json();
+
+        if (wpErrorResponse.customErrorCode == CustomErrorCode.DUPLICATED_MEMBER_EMAIL) {
+            input_email.style.borderColor = "red";
+            input_email.style.borderWidth = "2px";
+            email_duplication_error.style.display = "flex";
+            return;
+        }
+
+        console.error(`Failed to check email address: ${wpErrorResponse.customErrorCode} (${wpErrorResponse.errorMessage})`);
+        return;
+    }
+
+    input_email.style.borderColor = "green";
+    input_email.style.borderWidth = "2px";
+    email_duplication_error.style.display = "none";
 }
 
 function checkInputName() {
@@ -67,8 +105,9 @@ function checkInputName() {
 }
 
 function checkInputEmail() {
-    const address = getInputElementText("input-email");
-    if (validateEmailAddress(address) == false) {
+    const input_email = getElement("input-email") as HTMLInputElement;
+    const email = input_email.value;
+    if (validateEmailAddress(email) == false) {
         console.error("input email is not valid");
         return;
     }

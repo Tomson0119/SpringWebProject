@@ -55,6 +55,16 @@ public class MemberApiController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/check-email")
+    public ResponseEntity<Void> checkEmailDuplication(@RequestParam("email") String emailAddress) {
+        var findResult = memberService.findMemberByEmailAddress(emailAddress);
+        if (findResult.isPresent()) {
+            throw new WpException(CustomErrorCode.DUPLICATED_MEMBER_EMAIL);
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/find-pw")
     public ResponseEntity<Void> findPassword(@RequestParam("name") String memberName) {
 

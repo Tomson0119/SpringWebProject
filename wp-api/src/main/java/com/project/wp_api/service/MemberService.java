@@ -49,6 +49,10 @@ public class MemberService {
         return memberRepository.findByName(memberName);
     }
 
+    public Optional<Member> findMemberByEmailAddress(String emailAddress) {
+        return memberRepository.findByEmailAddress(emailAddress);
+    }
+
     public boolean tryLogin(String memberName, String password) {
         var member = findMemberByName(memberName);
         if (member.isEmpty()) {

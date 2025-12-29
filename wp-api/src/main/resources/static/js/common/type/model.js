@@ -15,4 +15,5 @@ export var CustomErrorCode;
     CustomErrorCode["MEMBER_NOT_FOUND"] = "MEMBER_NOT_FOUND";
     CustomErrorCode["INVALID_PASSWORD"] = "INVALID_PASSWORD";
     CustomErrorCode["DUPLICATED_MEMBER_NAME"] = "DUPLICATED_MEMBER_NAME";
+    CustomErrorCode["DUPLICATED_MEMBER_EMAIL"] = "DUPLICATED_MEMBER_EMAIL";
 })(CustomErrorCode || (CustomErrorCode = {}));
