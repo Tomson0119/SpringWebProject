@@ -23,15 +23,13 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-    public Member join(String memberName, String password) {
+    public Member join(String memberName, String emailAddress, String password) {
         var existingMember = findMemberByName(memberName);
         if (existingMember.isPresent()) {
             throw new WpException(CustomErrorCode.DUPLICATED_MEMBER_NAME);
         }
 
-        var member = new Member();
-        member.setName(memberName);
-        member.setPassword(password);
+        var member = new Member(memberName, emailAddress, password);
 
         logger.forInfoLog()
               .message("Joined new member")

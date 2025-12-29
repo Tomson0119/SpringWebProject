@@ -28,11 +28,12 @@ public class MemberApiController {
         logger.forInfoLog()
               .message("Got join request")
               .parameter(request.getName())
-              .parameter(request.getPassword())
+              .parameter(request.getEmailAddress())
               .log();
 
         var newMember = memberService.join(
             request.getName(),
+            request.getEmailAddress(),
             request.getPassword());
 
         var response = new JoinResponse(
