@@ -15,7 +15,10 @@ import lombok.Setter;
         @Index(name = "idx_name_emailAddress", columnList = "name, email_address")
     })
 public class Member {
-    @Column(name = "name", nullable = false)
+    @Column(name = "email_address", nullable = false, unique = true)
+    private final String emailAddress;
+
+    @Column(name = "name", nullable = false, unique = true)
     private final String name;
 
     @Column(name = "email_address", nullable = false, unique = true)

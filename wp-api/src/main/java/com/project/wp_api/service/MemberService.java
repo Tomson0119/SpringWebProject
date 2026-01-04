@@ -23,10 +23,10 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-    public Member join(String memberName, String emailAddress, String password) {
-        var existingMember = findMemberByName(memberName);
+    public Member join(String emailAddress, String memberName, String password) {
+        var existingMember = findMemberByEmailAddressAndName(emailAddress, memberName);
         if (existingMember.isPresent()) {
-            throw new WpException(CustomErrorCode.DUPLICATED_MEMBER_NAME);
+            throw new WpException(CustomErrorCode.DUPLICATED_MEMBER);
         }
 
         var member = new Member(memberName, emailAddress, password);
@@ -49,6 +49,10 @@ public class MemberService {
 
     public Optional<Member> findMemberByEmailAddress(String emailAddress) {
         return memberRepository.findByEmailAddress(emailAddress);
+    }
+
+    public Optional<Member> findMemberByEmailAddressAndName(String emailAddress, String memberName) {
+        return memberRepository.findByEmailAddressAndName(emailAddress, memberName);
     }
 
     public boolean tryLogin(String memberName, String password) {
