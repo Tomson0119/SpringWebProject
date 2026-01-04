@@ -3,8 +3,6 @@ import { getInputElementText, getElement } from "./common/utility/htmlUtility.js
 import { isWpErrorResponse, post, get } from "./common/utility/httpUtility.js";
 import { RegexHelper } from "./common/utility/stringUtility.js";
 
-const InvalidPasswordRegex: RegExp = new RegExp(`[^${RegexHelper.NumberRegexStr}${RegexHelper.AlphabetRegexStr}${RegexHelper.SpecialCharRegexStr}]`);
-
 async function sendJoinRequest() {
     const name = getInputElementText("input-name");
     const password = getInputElementText("input-password");
@@ -146,7 +144,7 @@ function validatePassword(password: string): boolean {
     }
 
     // 허용되지 않은 문자 입력
-    if (InvalidPasswordRegex.test(password)) {
+    if (RegexHelper.ValidPasswordRegex.test(password) == false) {
         console.log("invalid character is included");
         return false;
     }

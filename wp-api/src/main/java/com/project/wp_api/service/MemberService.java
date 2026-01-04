@@ -2,6 +2,7 @@ package com.project.wp_api.service;
 
 import com.project.wp_api.dto.common.enums.CustomErrorCode;
 import com.project.wp_api.exception.WpException;
+import com.project.wp_api.utility.RegexHelper;
 import com.project.wp_common.utility.logManage.WpLogManager;
 import com.project.wp_common.utility.logManage.WpLogger;
 import com.project.wp_domain.entity.Member;
@@ -10,11 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Service
 public class MemberService {
-
     private static final WpLogger logger = WpLogManager.getClassLogger(MemberService.class);
+    private static final Pattern validPasswordPattern = Pattern.compile(RegexHelper.ValidPasswordRegexString);
 
     private final MemberRepository memberRepository;
 
@@ -24,6 +26,10 @@ public class MemberService {
     }
 
     public Member join(String emailAddress, String memberName, String password) {
+        if (isValidPassword(password) == false) {
+            throw new WpException(CustomErrorCode.INVALID_PASSWORD);
+        }
+
         var existingMember = findMemberByEmailAddressAndName(emailAddress, memberName);
         if (existingMember.isPresent()) {
             throw new WpException(CustomErrorCode.DUPLICATED_MEMBER);
@@ -68,5 +74,13 @@ public class MemberService {
         }
 
         return true;
+    }
+
+    private boolean isValidPassword(String password) {
+        if (password.length() < 8 || password.length() > 16) {
+            return false;
+        }
+
+        return validPasswordPattern.matcher(password).find();
     }
 }
