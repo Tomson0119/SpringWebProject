@@ -12,7 +12,7 @@ import lombok.Setter;
 @Table(
     name = "member",
     indexes = {
-        @Index(name = "idx_name_emailAddress", columnList = "name, email_address")
+        @Index(name = "idx_emailAddress_name", columnList = "email_address, name")
     })
 public class Member {
     @Column(name = "email_address", nullable = false, unique = true)
@@ -20,9 +20,6 @@ public class Member {
 
     @Column(name = "name", nullable = false, unique = true)
     private final String name;
-
-    @Column(name = "email_address", nullable = false, unique = true)
-    private final String emailAddress;
 
     @Column(name = "password", nullable = false)
     private final String password;

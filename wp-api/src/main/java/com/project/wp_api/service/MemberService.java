@@ -33,6 +33,7 @@ public class MemberService {
 
         logger.forInfoLog()
               .message("Joined new member")
+              .parameter(member.getEmailAddress())
               .parameter(member.getName())
               .log();
 

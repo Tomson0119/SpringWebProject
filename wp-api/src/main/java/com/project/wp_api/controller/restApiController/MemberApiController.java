@@ -32,8 +32,8 @@ public class MemberApiController {
               .log();
 
         var newMember = memberService.join(
-            request.getName(),
             request.getEmailAddress(),
+            request.getName(),
             request.getPassword());
 
         var response = new JoinResponse(
