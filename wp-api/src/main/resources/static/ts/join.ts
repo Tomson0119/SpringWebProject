@@ -1,6 +1,9 @@
 import { CustomErrorCode, JoinRequest, WpErrorResponse } from "./common/type/model.js";
 import { getInputElementText, getElement } from "./common/utility/htmlUtility.js";
 import { isWpErrorResponse, post, get } from "./common/utility/httpUtility.js";
+import { RegexHelper } from "./common/utility/stringUtility.js";
+
+const InvalidPasswordRegex: RegExp = new RegExp(`[^${RegexHelper.NumberRegexStr}${RegexHelper.AlphabetRegexStr}${RegexHelper.SpecialCharRegexStr}]`);
 
 async function sendJoinRequest() {
     const name = getInputElementText("input-name");
@@ -98,38 +101,74 @@ async function sendCheckEmailRequest() {
 
 function checkInputName() {
     const name = getInputElementText("input-name");
+
     if (validateName(name) == false) {
-        console.error("input name is not valid");
-        return;
+        console.error(`${name} - input name is not valid`);
+    } else {
+        console.log(`${name} - input name is valid`);
     }
+}
+
+function validateName(name: string): boolean {
+    return RegexHelper.ValidNameRegex.test(name);
 }
 
 function checkInputEmail() {
     const input_email = getElement("input-email") as HTMLInputElement;
     const email = input_email.value;
+
     if (validateEmailAddress(email) == false) {
-        console.error("input email is not valid");
-        return;
+        console.error(`${email} - input email is not valid`);
+    } else {
+        console.log(`${email} - input email is valid`);
     }
 }
 
 function validateEmailAddress(address: string): boolean {
-    return true;
-}
-
-function validateName(name: string): boolean {
-    return true;
+    return RegexHelper.ValidEmailRegex.test(address);
 }
 
 function checkInputPassword() {
     const password = getInputElementText("input-password");
+
     if (validatePassword(password) == false) {
-        console.error("input pwd is not valid");
-        return;
+        console.error(`${password} - input pwd is not valid`);
+    } else {
+        console.log(`${password} - input pw is valid`);
     }
 }
 
 function validatePassword(password: string): boolean {
+    // 8자 이상 32자 이하 입력
+    if (password.length < 8 || password.length > 16) {
+        console.log("length is wrong");
+        return false;
+    }
+
+    // 허용되지 않은 문자 입력
+    if (InvalidPasswordRegex.test(password)) {
+        console.log("invalid character is included");
+        return false;
+    }
+
+    // 영문자 포함 여부 체크
+    if (RegexHelper.AlphabetRegex.test(password) == false) {
+        console.log("alphabet is not included");
+        return false;
+    }
+
+    // 숫자 포함 여부 체크
+    if (RegexHelper.NumberRegex.test(password) == false) {
+        console.log("number is not included");
+        return false;
+    }
+
+    // 특수문자 포함 여부 체크
+    if (RegexHelper.SpecialCharRegex.test(password) == false) {
+        console.log("Special char is not included");
+        return false;
+    }
+
     return true;
 }
 
@@ -153,9 +192,9 @@ function main() {
     const check_name_button = getElement("check-name");
     check_name_button.addEventListener("click", sendCheckNameRequest);
 
-    // input-name 포커스 이벤트
+    // input-name 입력 이벤트
     const input_name = getElement("input-name");
-    input_name.addEventListener("blur", checkInputName);
+    input_name.addEventListener("input", checkInputName);
 
     // input-email 입력 이벤트
     const input_email = getElement("input-email");
@@ -165,9 +204,9 @@ function main() {
     const check_email = getElement("check-email");
     check_email.addEventListener("click", sendCheckEmailRequest);
 
-    // input-password 포커스 이벤트
+    // input-password 입력 이벤트
     const input_pw = getElement("input-password");
-    input_pw.addEventListener("blur", checkInputPassword);
+    input_pw.addEventListener("input", checkInputPassword);
 
     // input-password-check 입력 이벤트
     const input_pw_check = getElement("input-password-check");
