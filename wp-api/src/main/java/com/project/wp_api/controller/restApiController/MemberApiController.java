@@ -1,9 +1,9 @@
 package com.project.wp_api.controller.restApiController;
 
+import com.project.wp_api.dto.common.enums.CustomErrorCode;
 import com.project.wp_api.dto.member.FindMemberResponse;
 import com.project.wp_api.dto.member.JoinRequest;
 import com.project.wp_api.dto.member.JoinResponse;
-import com.project.wp_api.dto.common.enums.CustomErrorCode;
 import com.project.wp_api.exception.WpException;
 import com.project.wp_api.service.MemberService;
 import com.project.wp_common.utility.logManage.WpLogManager;
@@ -11,6 +11,8 @@ import com.project.wp_common.utility.logManage.WpLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -23,8 +25,13 @@ public class MemberApiController {
     @Autowired
     public MemberService memberService;
 
+    @Autowired
+    public JavaMailSender mailSender;
+
     @PostMapping
     public ResponseEntity<JoinResponse> join(@RequestBody JoinRequest request) {
+        //TODO: Validation 적용하여 각 프로퍼티마다 검사해보기
+
         logger.forInfoLog()
               .message("Got join request")
               .parameter(request.getName())
@@ -62,6 +69,13 @@ public class MemberApiController {
         if (findResult.isPresent()) {
             throw new WpException(CustomErrorCode.DUPLICATED_MEMBER_EMAIL);
         }
+
+        var message = new SimpleMailMessage();
+        message.setFrom("wltjd666@naver.com");
+        message.setTo(emailAddress);
+        message.setText("테스트입니다.");
+        message.setSubject("테스트용 메일");
+        mailSender.send(message);
 
         return ResponseEntity.ok().build();
     }
