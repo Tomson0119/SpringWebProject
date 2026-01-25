@@ -1,3 +1,5 @@
+@import "common/common.css";
+
 body {
     font-family: Verdana;
     font-size: 30px;
@@ -30,11 +32,29 @@ body {
     margin-top: 5px;
     margin-bottom: 5px;
     width: 100%;
-    border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
     font-size: 15px;
+    border: 1px solid #ccc;
     padding: 12px;
+}
+
+.join-box input:focus {
+    outline: none;
+    border-color: #333;
+    border-width: 1.5px;
+}
+
+.join-box input[data-state="default"] {
+    border: 1px solid #ccc;
+}
+
+.join-box input[data-state="success"] {
+    border: 2px solid green;
+}
+
+.join-box input[data-state="fail"] {
+    border: 2px solid red;
 }
 
 .join-box button {
@@ -51,8 +71,12 @@ body {
     transition: background-color 0.25s ease;
 }
 
-.join-box button:hover {
+.join-box button:enabled:hover {
     background-color: #45a049;
+}
+
+.join-box button:disabled {
+    background-color: gray;
 }
 
 .input-group {
@@ -71,6 +95,18 @@ body {
     width: 150px;
 }
 
+.info-message {
+    color: green;
+    font-size: 13px;
+    margin-left: 3px;
+    margin-right: auto;
+    margin-top: 1px;
+    margin-bottom: 10px;
+    width: 100%;
+    text-align: left;
+    display: flex;
+}
+
 .error-message {
     color: red;
     font-size: 13px;
@@ -80,5 +116,5 @@ body {
     margin-bottom: 10px;
     width: 100%;
     text-align: left;
-    display: none;
+    display: flex;
 }

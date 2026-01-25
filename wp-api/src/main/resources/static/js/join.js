@@ -2,21 +2,20 @@ import { CustomErrorCode } from "./common/type/model.js";
 import { getInputElementText, getElement } from "./common/utility/htmlUtility.js";
 import { isWpErrorResponse, post, get } from "./common/utility/httpUtility.js";
 import { RegexHelper } from "./common/utility/stringUtility.js";
+let emailValidationDone = false;
+let nameValidationDone = false;
+let passwordValidationDone = false;
 async function sendJoinRequest() {
+    const email = getInputElementText("input-email");
     const name = getInputElementText("input-name");
     const password = getInputElementText("input-password");
-    // name 검증
-    if (validateName(name) == false) {
-        console.error("input name is not valid");
-        return;
-    }
-    // password 검증
-    if (validatePassword(password) == false) {
-        console.error("input pwd is not valid");
+    if (emailValidationDone == false || nameValidationDone == false || passwordValidationDone == false) {
+        console.error("some of required input value is not valid");
         return;
     }
     const request = {
         name: name,
+        emailAddress: email,
         password: password,
     };
     const response = await post("/members", request);
@@ -41,18 +40,17 @@ async function sendCheckNameRequest() {
     if (isWpErrorResponse(response)) {
         const wpErrorResponse = (await response.json());
         if (wpErrorResponse.customErrorCode == CustomErrorCode.DUPLICATED_MEMBER_NAME) {
-            name_duplication_error.style.display = "flex";
-            input_name.style.borderColor = "red";
-            input_name.style.borderWidth = "2px";
+            name_duplication_error.hidden = false;
+            input_name.dataset.state = "fail";
             return;
         }
         console.error(`Failed to check name: ${wpErrorResponse.customErrorCode} (${wpErrorResponse.errorMessage})`);
         return;
     }
-    name_duplication_error.style.display = "none";
-    input_name.style.borderColor = "green";
-    input_name.style.borderWidth = "2px";
-    console.log("Input name is not duplicated");
+    name_duplication_error.hidden = true;
+    input_name.dataset.state = "success";
+    nameValidationDone = true;
+    checkAndActivateJoinButton();
 }
 async function sendCheckEmailRequest() {
     const input_email = getElement("input-email");
@@ -66,51 +64,83 @@ async function sendCheckEmailRequest() {
     if (isWpErrorResponse(response)) {
         const wpErrorResponse = await response.json();
         if (wpErrorResponse.customErrorCode == CustomErrorCode.DUPLICATED_MEMBER_EMAIL) {
-            input_email.style.borderColor = "red";
-            input_email.style.borderWidth = "2px";
-            email_duplication_error.style.display = "flex";
+            email_duplication_error.hidden = false;
+            input_email.dataset.state = "fail";
             return;
         }
         console.error(`Failed to check email address: ${wpErrorResponse.customErrorCode} (${wpErrorResponse.errorMessage})`);
         return;
     }
-    input_email.style.borderColor = "green";
-    input_email.style.borderWidth = "2px";
-    email_duplication_error.style.display = "none";
+    const send_code_info = getElement("send-verification-code-info");
+    send_code_info.hidden = false;
+    email_duplication_error.hidden = true;
+    input_email.dataset.state = "success";
+    emailValidationDone = true;
+    checkAndActivateJoinButton();
 }
 function checkInputName() {
-    const name = getInputElementText("input-name");
-    if (validateName(name) == false) {
-        console.error(`${name} - input name is not valid`);
+    const input_name = getElement("input-name");
+    const input_name_error = getElement("input-name-error");
+    nameValidationDone = false;
+    if (input_name.value.length == 0) {
+        input_name_error.hidden = true;
+        input_name.dataset.state = "default";
+    }
+    else if (validateName(input_name.value)) {
+        input_name_error.hidden = true;
+        input_name.dataset.state = "green";
+        return true;
     }
     else {
-        console.log(`${name} - input name is valid`);
+        input_name_error.hidden = false;
+        input_name.dataset.state = "fail";
     }
+    checkAndActivateJoinButton();
 }
 function validateName(name) {
     return RegexHelper.ValidNameRegex.test(name);
 }
 function checkInputEmail() {
+    const input_email_error = getElement("input-email-error");
     const input_email = getElement("input-email");
     const email = input_email.value;
-    if (validateEmailAddress(email) == false) {
-        console.error(`${email} - input email is not valid`);
+    const send_code_info = getElement("send-verification-code-info");
+    send_code_info.hidden = true;
+    emailValidationDone = false;
+    if (input_email.value.length == 0) {
+        input_email_error.hidden = true;
+        input_email.dataset.state = "default";
+    }
+    else if (validateEmailAddress(email)) {
+        input_email_error.hidden = true;
+        input_email.dataset.state = "success";
     }
     else {
-        console.log(`${email} - input email is valid`);
+        input_email_error.hidden = false;
+        input_email.dataset.state = "fail";
     }
+    checkAndActivateJoinButton();
 }
 function validateEmailAddress(address) {
     return RegexHelper.ValidEmailRegex.test(address);
 }
 function checkInputPassword() {
-    const password = getInputElementText("input-password");
-    if (validatePassword(password) == false) {
-        console.error(`${password} - input pwd is not valid`);
+    const input_password = getElement("input-password");
+    const input_password_error = getElement("input-password-error");
+    passwordValidationDone = false;
+    if (input_password.value.length == 0) {
+        input_password_error.hidden = true;
+        input_password.dataset.state = "default";
+    }
+    else if (validatePassword(input_password.value)) {
+        input_password_error.hidden = true;
+        input_password.dataset.state = "success";
     }
     else {
-        console.log(`${password} - input pw is valid`);
+        input_password_error.hidden = false;
+        input_password.dataset.state = "fail";
     }
+    checkAndActivateJoinButton();
 }
 function validatePassword(password) {
     // 8자 이상 32자 이하 입력
@@ -142,13 +172,31 @@ function validatePassword(password) {
 }
 function checkInputPasswordCheck() {
     const password = getInputElementText("input-password");
-    const password_check = getInputElementText("input-password-check");
-    if (password == password_check) {
-        console.log("Same");
+    const input_password_check = getElement("input-password-check");
+    const input_password_check_error = getElement("input-password-check-error");
+    passwordValidationDone = false;
+    if (input_password_check.value.length == 0) {
+        input_password_check_error.hidden = true;
+        input_password_check.dataset.state = "default";
+    }
+    else if (input_password_check.value == password) {
+        input_password_check_error.hidden = true;
+        input_password_check.dataset.state = "success";
+        passwordValidationDone = true;
     }
     else {
-        console.error("Not same");
+        input_password_check_error.hidden = false;
+        input_password_check.dataset.state = "fail";
     }
+    checkAndActivateJoinButton();
+}
+function checkAndActivateJoinButton() {
+    const join_button = getElement("join-button");
+    if (emailValidationDone == false || nameValidationDone == false || passwordValidationDone == false) {
+        join_button.disabled = true;
+        return;
+    }
+    join_button.disabled = false;
 }
 function main() {
     // join-button 클릭 이벤트

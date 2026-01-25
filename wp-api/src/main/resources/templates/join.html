@@ -20,7 +20,9 @@
                         <input class="input-email" id="input-email" placeholder="이메일" required type="text" />
                         <button class="check-button" id="check-email">이메일 확인</button>
                     </div>
-                    <p class="error-message" id="email-duplication-error">중복된 이메일이 존재합니다.</p>
+                    <p class="info-message" id="send-verification-code-info" hidden>이메일로 인증코드를 전송하였습니다.</p>
+                    <p class="error-message" id="input-email-error" hidden>잘못된 이메일 형식입니다.</p>
+                    <p class="error-message" id="email-duplication-error" hidden>중복된 이메일이 존재합니다.</p>
                 </div>
 
                 <div class="input-group">
@@ -28,15 +30,15 @@
                         <input class="input-verification-code" id="input-verification-code" placeholder="인증코드" required type="text" />
                         <button class="check-button" id="check-verification-code">확인</button>
                     </div>
-                    <p class="error-message" id="verification-code-error">잘못된 인증코드입니다.</p>
+                    <p class="error-message" id="verification-code-error" hidden>잘못된 인증코드입니다.</p>
                 </div>
 
-                <div class="password-group">
+                <div class="input-group">
                     <input id="input-password" placeholder="비밀번호" required type="password" />
-                    <p class="input-password-error" style="display: none"></p>
+                    <p class="error-message" id="input-password-error" hidden>잘못된 비밀번호 형식입니다.</p>
 
                     <input id="input-password-check" placeholder="비밀번호 확인" required type="password" />
-                    <p class="input-password-check-error" style="display: none"></p>
+                    <p class="error-message" id="input-password-check-error" hidden>비밀번호가 일치하지 않습니다.</p>
                 </div>
 
                 <div class="input-group">
@@ -44,10 +46,11 @@
                         <input class="input-name" id="input-name" placeholder="닉네임" required type="text" />
                         <button class="check-button" id="check-name">닉네임 확인</button>
                     </div>
-                    <p class="error-message" id="name-duplication-error">중복된 닉네임이 존재합니다.</p>
+                    <p class="error-message" id="input-name-error" hidden>잘못된 닉네임 형식입니다.</p>
+                    <p class="error-message" id="name-duplication-error" hidden>중복된 닉네임이 존재합니다.</p>
                 </div>
 
-                <button id="join-button" type="submit">등록</button>
+                <button class="join-button" id="join-button" type="submit" disabled>등록</button>
             </div>
         </div>
 
