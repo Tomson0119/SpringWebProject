@@ -4,6 +4,7 @@ import { isWpErrorResponse, post, get } from "./common/utility/httpUtility.js";
 import { RegexHelper } from "./common/utility/stringUtility.js";
 
 let emailValidationDone = false;
+let verificationCodeValidationDone = false;
 let nameValidationDone = false;
 let passwordValidationDone = false;
 
@@ -12,7 +13,7 @@ async function sendJoinRequest() {
     const name = getInputElementText("input-name");
     const password = getInputElementText("input-password");
 
-    if (emailValidationDone == false || nameValidationDone == false || passwordValidationDone == false) {
+    if (emailValidationDone == false || verificationCodeValidationDone == false || nameValidationDone == false || passwordValidationDone == false) {
         console.error("some of required input value is not valid");
         return;
     }
@@ -48,6 +49,7 @@ async function sendCheckNameRequest() {
     const response = await get("/members/check-name", { name: name });
     if (isWpErrorResponse(response)) {
         const wpErrorResponse = (await response.json()) as WpErrorResponse;
+        nameValidationDone = false;
 
         if (wpErrorResponse.customErrorCode == CustomErrorCode.DUPLICATED_MEMBER_NAME) {
             name_duplication_error.hidden = false;
@@ -78,6 +80,7 @@ async function sendCheckEmailRequest() {
     const response = await get("/members/check-email", { email: email });
     if (isWpErrorResponse(response)) {
         const wpErrorResponse: WpErrorResponse = await response.json();
+        emailValidationDone = false;
 
         if (wpErrorResponse.customErrorCode == CustomErrorCode.DUPLICATED_MEMBER_EMAIL) {
             email_duplication_error.hidden = false;
@@ -99,6 +102,33 @@ async function sendCheckEmailRequest() {
     checkAndActivateJoinButton();
 }
 
+async function sendCheckVerificationCode() {
+    const input_email = getElement("input-email") as HTMLInputElement;
+    const input_code = getElement("input-verification-code") as HTMLInputElement;
+
+    const verification_code_error = getElement("verification-code-error");
+    const response = await get("/members/check-verification-code", { email: input_email.value, code: input_code.value });
+    if (isWpErrorResponse(response)) {
+        const wpErrorResponse: WpErrorResponse = await response.json();
+        verificationCodeValidationDone = false;
+
+        if (wpErrorResponse.customErrorCode == CustomErrorCode.INVALID_VERIFICATION_CODE) {
+            verification_code_error.hidden = false;
+            input_code.dataset.state = "fail";
+            return;
+        }
+
+        console.error(`Failed to check verification code: ${wpErrorResponse.customErrorCode} (${wpErrorResponse.errorMessage})`);
+        return;
+    }
+
+    verification_code_error.hidden = true;
+    input_code.dataset.state = "success";
+
+    verificationCodeValidationDone = true;
+    checkAndActivateJoinButton();
+}
+
 function checkInputName() {
     const input_name = getElement("input-name") as HTMLInputElement;
     const input_name_error = getElement("input-name-error");
@@ -116,8 +146,6 @@ function checkInputName() {
         input_name_error.hidden = false;
         input_name.dataset.state = "fail";
     }
-
-    checkAndActivateJoinButton();
 }
 
 function validateName(name: string): boolean {
@@ -156,8 +184,6 @@ function checkInputPassword() {
     const input_password = getElement("input-password") as HTMLInputElement;
     const input_password_error = getElement("input-password-error");
 
-    passwordValidationDone = false;
-
     if (input_password.value.length == 0) {
         input_password_error.hidden = true;
         input_password.dataset.state = "default";
@@ -169,7 +195,7 @@ function checkInputPassword() {
         input_password.dataset.state = "fail";
     }
 
-    checkAndActivateJoinButton();
+    checkInputPasswordCheck();
 }
 
 function validatePassword(password: string): boolean {
@@ -230,7 +256,7 @@ function checkInputPasswordCheck() {
 
 function checkAndActivateJoinButton() {
     const join_button = getElement("join-button") as HTMLButtonElement;
-    if (emailValidationDone == false || nameValidationDone == false || passwordValidationDone == false) {
+    if (emailValidationDone == false || verificationCodeValidationDone == false || nameValidationDone == false || passwordValidationDone == false) {
         join_button.disabled = true;
         return;
     }
@@ -258,6 +284,10 @@ function main() {
     // check-email 클릭 이벤트
     const check_email = getElement("check-email");
     check_email.addEventListener("click", sendCheckEmailRequest);
+
+    // check_verification_code 클릭 이벤트
+    const check_verification_code = getElement("check-verification-code");
+    check_verification_code.addEventListener("click", sendCheckVerificationCode);
 
     // input-password 입력 이벤트
     const input_pw = getElement("input-password");

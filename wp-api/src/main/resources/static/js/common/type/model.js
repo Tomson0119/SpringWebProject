@@ -17,4 +17,5 @@ export var CustomErrorCode;
     CustomErrorCode["DUPLICATED_MEMBER"] = "DUPLICATED_MEMBER";
     CustomErrorCode["DUPLICATED_MEMBER_NAME"] = "DUPLICATED_MEMBER_NAME";
     CustomErrorCode["DUPLICATED_MEMBER_EMAIL"] = "DUPLICATED_MEMBER_EMAIL";
+    CustomErrorCode["INVALID_VERIFICATION_CODE"] = "INVALID_VERIFICATION_CODE";
 })(CustomErrorCode || (CustomErrorCode = {}));

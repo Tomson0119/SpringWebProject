@@ -35,7 +35,7 @@ public class MemberService {
             throw new WpException(CustomErrorCode.DUPLICATED_MEMBER);
         }
 
-        var member = new Member(memberName, emailAddress, password);
+        var member = new Member(emailAddress, memberName, password);
 
         logger.forInfoLog()
               .message("Joined new member")

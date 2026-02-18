@@ -28,76 +28,6 @@ public class MemberApiController {
     @Autowired
     public JavaMailSender mailSender;
 
-    @PostMapping
-    public ResponseEntity<JoinResponse> join(@RequestBody JoinRequest request) {
-        //TODO: Validation 적용하여 각 프로퍼티마다 검사해보기
-
-        logger.forInfoLog()
-              .message("Got join request")
-              .parameter(request.getName())
-              .parameter(request.getEmailAddress())
-              .log();
-
-        var newMember = memberService.join(
-            request.getEmailAddress(),
-            request.getName(),
-            request.getPassword());
-
-        var response = new JoinResponse(
-            newMember.getId(),
-            newMember.getName());
-
-        return ResponseEntity
-            .status(HttpStatus.CREATED)
-            .location(URI.create("/members/" + newMember.getId()))
-            .body(response);
-    }
-
-    @GetMapping("/check-name")
-    public ResponseEntity<Void> checkNameDuplication(@RequestParam("name") String memberName) {
-        var findResult = memberService.findMemberByName(memberName);
-        if (findResult.isPresent()) {
-            throw new WpException(CustomErrorCode.DUPLICATED_MEMBER_NAME);
-        }
-
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/check-email")
-    public ResponseEntity<Void> checkEmailDuplication(@RequestParam("email") String emailAddress) {
-        var findResult = memberService.findMemberByEmailAddress(emailAddress);
-        if (findResult.isPresent()) {
-            throw new WpException(CustomErrorCode.DUPLICATED_MEMBER_EMAIL);
-        }
-
-        var message = new SimpleMailMessage();
-        message.setFrom("wltjd666@naver.com");
-        message.setTo(emailAddress);
-        message.setText("테스트입니다.");
-        message.setSubject("테스트용 메일");
-        mailSender.send(message);
-
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/find-pw")
-    public ResponseEntity<Void> findPassword(@RequestParam("name") String memberName) {
-
-        logger.forInfoLog()
-              .message("Got find pw request")
-              .parameter(memberName)
-              .log();
-
-        var findResult = memberService.findMemberByName(memberName);
-        if (findResult.isEmpty()) {
-            throw new WpException(CustomErrorCode.MEMBER_NOT_FOUND);
-        }
-
-        //TODO: 등록된 이메일로 임시 비밀번호 전송
-
-        return ResponseEntity.ok().build();
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<FindMemberResponse> findById(@PathVariable("id") Long memberId) {
         var findResult = memberService.findMemberById(memberId);
@@ -126,5 +56,93 @@ public class MemberApiController {
             member.getName());
 
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping
+    public ResponseEntity<JoinResponse> join(@RequestBody JoinRequest request) {
+        //TODO: Validation 적용하여 각 프로퍼티마다 검사해보기
+
+        logger.forInfoLog()
+              .message("Got join request")
+              .parameter(request.getName())
+              .parameter(request.getEmailAddress())
+              .log();
+
+        var newMember = memberService.join(
+            request.getEmailAddress(),
+            request.getName(),
+            request.getPassword());
+
+        var response = new JoinResponse(
+            newMember.getId(),
+            newMember.getName());
+
+        return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .location(URI.create("/members/" + newMember.getId()))
+            .body(response);
+    }
+
+    @GetMapping("/check-verification-code")
+    public ResponseEntity<Void> checkEmailVerificationCode(
+        @RequestParam("email") String emailAddress,
+        @RequestParam("code") int verificationCode) {
+        //TODO: memberId로 redis에서 code 찾기, 만료일 체크
+
+        var correctCode = 1234;
+        if (verificationCode != correctCode) {
+            throw new WpException(CustomErrorCode.INVALID_VERIFICATION_CODE);
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/check-name")
+    public ResponseEntity<Void> checkNameDuplication(@RequestParam("name") String memberName) {
+        var findResult = memberService.findMemberByName(memberName);
+        if (findResult.isPresent()) {
+            throw new WpException(CustomErrorCode.DUPLICATED_MEMBER_NAME);
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/check-email")
+    public ResponseEntity<Void> checkEmailDuplication(@RequestParam("email") String emailAddress) {
+        var findResult = memberService.findMemberByEmailAddress(emailAddress);
+        if (findResult.isPresent()) {
+            throw new WpException(CustomErrorCode.DUPLICATED_MEMBER_EMAIL);
+        }
+
+        //TODO: Redis에 저장 후 조회
+        var verificationCode = 1234;
+
+        var message = new SimpleMailMessage();
+        message.setFrom("wltjd666@naver.com");
+        message.setTo(emailAddress);
+        message.setText("인증번호: " + verificationCode);
+        message.setSubject("테스트용 메일");
+        mailSender.send(message);
+
+        return ResponseEntity.ok().build();
+    }
+
+
+    @GetMapping("/find-pw")
+    public ResponseEntity<Void> findPassword(@RequestParam("name") String memberName) {
+
+        logger.forInfoLog()
+              .message("Got find pw request")
+              .parameter(memberName)
+              .log();
+
+        var findResult = memberService.findMemberByName(memberName);
+        if (findResult.isEmpty()) {
+            throw new WpException(CustomErrorCode.MEMBER_NOT_FOUND);
+        }
+
+        //TODO: 등록된 이메일로 임시 비밀번호 전송
+
+        return ResponseEntity.ok().build();
     }
 }

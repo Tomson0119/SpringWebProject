@@ -15,8 +15,9 @@ public enum CustomErrorCode {
 
     DUPLICATED_MEMBER(HttpStatus.CONFLICT, "Member already exists"),
     DUPLICATED_MEMBER_NAME(HttpStatus.CONFLICT, "Name already exists"),
-    DUPLICATED_MEMBER_EMAIL(HttpStatus.CONFLICT, "Email address already exists");
+    DUPLICATED_MEMBER_EMAIL(HttpStatus.CONFLICT, "Email address already exists"),
 
+    INVALID_VERIFICATION_CODE(HttpStatus.BAD_REQUEST, "Verification code is not correct");
 
     private final HttpStatus httpStatus;
     private final String message;
