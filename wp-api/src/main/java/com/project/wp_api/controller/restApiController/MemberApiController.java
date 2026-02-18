@@ -6,13 +6,13 @@ import com.project.wp_api.dto.member.JoinRequest;
 import com.project.wp_api.dto.member.JoinResponse;
 import com.project.wp_api.exception.WpException;
 import com.project.wp_api.service.MemberService;
+import com.project.wp_api.service.mail.NaverMailService;
 import com.project.wp_common.utility.logManage.WpLogManager;
 import com.project.wp_common.utility.logManage.WpLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -21,12 +21,12 @@ import java.net.URI;
 @RequestMapping("/members")
 public class MemberApiController {
     private static final WpLogger logger = WpLogManager.getClassLogger(MemberApiController.class);
-
     @Autowired
     public MemberService memberService;
-
     @Autowired
-    public JavaMailSender mailSender;
+    public NaverMailService naverMailService;
+    // 임시 테스트용
+    private String temporaryVerificationCode;
 
     @GetMapping("/{id}")
     public ResponseEntity<FindMemberResponse> findById(@PathVariable("id") Long memberId) {
@@ -86,11 +86,11 @@ public class MemberApiController {
     @GetMapping("/check-verification-code")
     public ResponseEntity<Void> checkEmailVerificationCode(
         @RequestParam("email") String emailAddress,
-        @RequestParam("code") int verificationCode) {
+        @RequestParam("code") String verificationCode) {
         //TODO: memberId로 redis에서 code 찾기, 만료일 체크
 
-        var correctCode = 1234;
-        if (verificationCode != correctCode) {
+        var correctCode = temporaryVerificationCode;
+        if (verificationCode.equals(correctCode) == false) {
             throw new WpException(CustomErrorCode.INVALID_VERIFICATION_CODE);
         }
 
@@ -115,14 +115,15 @@ public class MemberApiController {
         }
 
         //TODO: Redis에 저장 후 조회
-        var verificationCode = 1234;
+        var verificationCode = naverMailService.generateVerificationCode();
+        temporaryVerificationCode = verificationCode;
 
         var message = new SimpleMailMessage();
         message.setFrom("wltjd666@naver.com");
         message.setTo(emailAddress);
         message.setText("인증번호: " + verificationCode);
         message.setSubject("테스트용 메일");
-        mailSender.send(message);
+        naverMailService.sendSimpleMessage(message);
 
         return ResponseEntity.ok().build();
     }
